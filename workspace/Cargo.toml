@@ -1,0 +1,6 @@
+[workspace]
+
+members = [
+    "server_main",
+    "tools",
+]
