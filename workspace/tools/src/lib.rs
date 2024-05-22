@@ -4,8 +4,33 @@ use std::{
     env,
     path::Path
 };
-fn get_content_or_404(file_path: &str) -> Result<String, std::io::Error> {
+
+fn generate_200_response(file_path: &str) -> String{
+    let content = fs::read_to_string(file_path).unwrap();
+    let response_header = "HTTP/1.1 200 OK\r\n".to_owned();
+    let generic_headers = generate_generic_headers().to_owned();
+    let ok_headers = generate_200_headers(&content).to_owned();
+    
+    content + &response_header + &generic_headers + &generic_headers + &ok_headers
+}
+
+
+pub fn get_content_or_404(file_path: &str) -> Result<String, std::io::Error> {
     fs::read_to_string(file_path)
+}
+
+
+
+// fn generate_404_response() -> &[u8] {
+//     b"HTTP/1.1 404 Not Found"
+// }
+
+fn generate_generic_headers() -> String {
+    String::from("insert generic headers here")
+}
+
+fn generate_200_headers(content: &str) -> String{
+    String::from("insert headers related to content here")
 }
 
 #[cfg(test)]
@@ -23,5 +48,10 @@ mod tests {
 
         assert_eq!(actual_content, content);
         
+    }
+
+    #[test]
+    fn test_404() {
+
     }
 }
