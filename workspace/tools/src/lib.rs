@@ -33,8 +33,9 @@ fn generate_generic_headers() -> String {
     String::from("insert generic headers here")
 }
 
-fn generate_date_header(time: LocalResult<DateTime<Utc>>) -> String {
-    String::from("date header")
+fn generate_date_header(time: DateTime<Utc>) -> String {
+    format!("Date: {}", time.format("%a, %d %b %Y %I:%M:%S GMT"))
+
 }
 
 fn generate_200_headers(content: &str) -> String{
@@ -70,8 +71,8 @@ mod tests {
 
     #[test]
     fn test_date_header() {
-        let test_time = Utc.with_ymd_and_hms(2020, 3, 20, 2, 23, 0);
-        let correct_string = String::from("Date: Fri, 20, Mar 2020 02:20:00 GMT");
+        let test_time = Utc.with_ymd_and_hms(2020, 3, 20, 2, 23, 0).unwrap();
+        let correct_string = String::from("Date: Fri, 20 Mar 2020 02:23:00 GMT");
         let test_string = generate_date_header(test_time);
 
         assert_eq!(correct_string, test_string);
