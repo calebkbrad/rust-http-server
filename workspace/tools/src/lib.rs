@@ -2,10 +2,14 @@ use std::{
     fs,
     error::Error,
     env,
-    path::Path
+    path::Path,
 };
 
-fn generate_200_response(file_path: &str) -> String{
+use chrono::{
+    offset::LocalResult, DateTime, Local, Utc
+};
+
+fn generate_200_response(file_path: &str) -> String {
     let content = fs::read_to_string(file_path).unwrap();
     let response_header = "HTTP/1.1 200 OK\r\n".to_owned();
     let generic_headers = generate_generic_headers().to_owned();
@@ -29,12 +33,21 @@ fn generate_generic_headers() -> String {
     String::from("insert generic headers here")
 }
 
+fn generate_date_header(time: LocalResult<DateTime<Utc>>) -> String {
+    String::from("date header")
+}
+
 fn generate_200_headers(content: &str) -> String{
     String::from("insert headers related to content here")
 }
 
+
+
+
 #[cfg(test)]
 mod tests {
+    use chrono::TimeZone;
+
     use super::*;
 
     #[test]
@@ -50,8 +63,17 @@ mod tests {
         
     }
 
-    #[test]
-    fn test_404() {
+    // #[test]
+    // fn test_404() {
 
+    // }
+
+    #[test]
+    fn test_date_header() {
+        let test_time = Utc.with_ymd_and_hms(2020, 3, 20, 2, 23, 0);
+        let correct_string = String::from("Date: Fri, 20, Mar 2020 02:20:00 GMT");
+        let test_string = generate_date_header(test_time);
+
+        assert_eq!(correct_string, test_string);
     }
 }
