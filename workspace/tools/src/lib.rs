@@ -44,6 +44,8 @@ fn generate_date_header(time: DateTime<Utc>) -> String {
 }
 
 fn generate_200_headers(content: &str) -> String{
+    let mut headers = Vec::with_capacity(5);
+    headers.push(format!("Content-Length: {}", content.len()));
     String::from("insert headers related to content here")
 }
 
@@ -81,5 +83,17 @@ mod tests {
         let test_string = generate_date_header(test_time);
 
         assert_eq!(correct_string, test_string);
+    }
+
+    #[test]
+    fn test_200_headers() {
+        let correct_headers = String::from(
+            "Content-Length: 22\r\nLast-Modified: Sun, 19 May 2024 12:53:35 GMT\r\nContent-Type: text/html\r\n"
+        );
+        let root = Path::new("/home/caleb/rust-http-server/workspace");
+        assert!(env::set_current_dir(&root).is_ok());
+        let content = get_content_or_404("test_files/content.html").expect("File was not found");
+        let test_headers = generate_200_headers(&content);
+        assert_eq!(correct_headers, test_headers);
     }
 }
