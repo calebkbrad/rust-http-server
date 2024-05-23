@@ -30,7 +30,12 @@ pub fn get_content_or_404(file_path: &str) -> Result<String, std::io::Error> {
 // }
 
 fn generate_generic_headers() -> String {
-    String::from("insert generic headers here")
+    let mut headers = Vec::with_capacity(3);
+    headers.push(generate_date_header(Utc::now()));
+    headers.push(String::from("Server: Rust Server"));
+    headers.push(String::from("Connection: close"));
+    
+    headers.join("\r\n")
 }
 
 fn generate_date_header(time: DateTime<Utc>) -> String {
